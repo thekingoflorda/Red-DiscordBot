@@ -95,4 +95,18 @@ async def test_bank_withdraw(bank, member_factory):
     await bank.set_balance(mbr, 100)
     with pytest.raises(ValueError):
         await bank.withdraw_credits(mbr, 101)
-    
+
+async def test_get_account(bank, member_factory):
+    mbr = member_factory.get()
+    await bank.set_global(True)
+    await bank.get_account(mbr)
+    await bank.set_global(False)
+
+async def test_get_bank_name(bank, guild_factory):
+    guild = guild_factory.get()
+    with pytest.raises(RuntimeError):
+        await bank.get_bank_name(guild=None)
+
+    await bank.set_global(True)
+    await bank.get_bank_name(guild=guild)
+    await bank.set_global(False)
