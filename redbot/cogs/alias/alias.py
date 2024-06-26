@@ -18,6 +18,15 @@ _ = Translator("Alias", __file__)
 
 log = logging.getLogger("red.cogs.alias")
 
+branch_coverage = {
+    "is_command_command_exists": False,
+    "is_command_reserved_name": False
+}
+
+def write_coverage_info():
+    with open('branch_coverage.txt', 'w') as f:
+        for branch, covered in branch_coverage.items():
+            f.write(f"{branch}: {'Covered' if covered else 'Not covered'}\n")
 
 class _TrackingFormatter(Formatter):
     def __init__(self):
@@ -126,7 +135,19 @@ class Alias(commands.Cog):
         The function name can be changed when alias is reworked
         """
         command = self.bot.get_command(alias_name)
-        return command is not None or alias_name in commands.RESERVED_COMMAND_NAMES
+        if command is not None:
+            # This branch was reached, so set the flag in branch_coverage
+            branch_coverage["is_command_command_exists"] = True
+            write_coverage_info()
+            return True
+        elif alias_name in commands.RESERVED_COMMAND_NAMES:
+            # This branch was reached, so set the flag in branch_coverage
+            branch_coverage["is_command_reserved_name"] = True
+            write_coverage_info()
+            return True
+        else:
+            write_coverage_info()
+            return False
 
     @staticmethod
     def is_valid_alias_name(alias_name: str) -> bool:

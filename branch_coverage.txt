@@ -1,0 +1,2 @@
+is_command_command_exists: Covered
+is_command_reserved_name: Not covered

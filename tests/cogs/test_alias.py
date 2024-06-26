@@ -75,6 +75,7 @@ async def test_delete_global_alias(alias, ctx):
     assert alias_obj is None
 
 from unittest.mock import Mock, AsyncMock
+from redbot.cogs.alias.alias import branch_coverage
 
 def test_is_command(alias):
     # Setup: Create some command and non-command names
@@ -87,5 +88,8 @@ def test_is_command(alias):
 
     # Execution & Assertion: Check if is_command correctly identifies commands and non-commands
     assert alias.is_command(command_name) is True
+    assert branch_coverage["is_command_command_exists"] is True
+
     assert alias.is_command(non_command_name) is False
+    assert branch_coverage["is_command_reserved_name"] is False
 
