@@ -73,3 +73,19 @@ async def test_delete_global_alias(alias, ctx):
 
     alias_obj = await alias._aliases.get_alias(None, "test_global")
     assert alias_obj is None
+
+from unittest.mock import Mock, AsyncMock
+
+def test_is_command(alias):
+    # Setup: Create some command and non-command names
+    command_name = "help"
+    non_command_name = "not_a_command"
+
+    # Mock the bot's get_command method
+    alias.bot = Mock()
+    alias.bot.get_command = Mock(side_effect=lambda cmd: cmd if cmd == command_name else None)
+
+    # Execution & Assertion: Check if is_command correctly identifies commands and non-commands
+    assert alias.is_command(command_name) is True
+    assert alias.is_command(non_command_name) is False
+
