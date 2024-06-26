@@ -28,14 +28,33 @@ Function 1: set_balance
 https://github.com/thekingoflorda/Red-DiscordBot/commit/186b53ae9a5832e0792aff2b3c01f06b8d4368bf
 
 ![CleanShot 2024-06-22 at 12 10 20@2x](https://github.com/thekingoflorda/Red-DiscordBot/assets/64592718/598a28f8-a010-4241-9fc3-774edf66a025)
-In this immage you can see the result that the coverage tool put in a special file. I tagged each conditional branch, 500 - 506 are the ones related to this function.
+In this image you can see the result that the coverage tool put in a special file. I tagged each conditional branch, 500 - 506 are the ones related to this function.
 
 Function 2: withdraw_credits
 
 [<Provide the same kind of information provided for Function 1>](https://github.com/thekingoflorda/Red-DiscordBot/commit/186b53ae9a5832e0792aff2b3c01f06b8d4368bf
 
 ![CleanShot 2024-06-22 at 12 10 20@2x](https://github.com/thekingoflorda/Red-DiscordBot/assets/64592718/598a28f8-a010-4241-9fc3-774edf66a025)
-In this immage you can see the result that the coverage tool put in a special file. I tagged each conditional branch, 507 - 509 are the ones related to this function.
+In this image you can see the result that the coverage tool put in a special file. I tagged each conditional branch, 507 - 509 are the ones related to this function.
+
+Teammember: Bram
+
+Function 1: get_account
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88cc2a3c57047d0614d
+
+// screenshot of coverage tool
+In this image you can see the result of the coverage tool that has been put into branch_coverage.txt. The listed values are for each conditional branch, if the tests covered the branch, the value would change from False to True.
+Currently the coverage reaches the 2nd, 3rd and 4th branches but not the 1st one.
+
+Function 2: get_bank_name
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88cc2a3c57047d0614d
+
+// screenshot of coverage tool pt2
+In this image you can see the result of the coverage tool that has been put into branch_coverage.txt. The listed values are for each conditional branch, if the tests covered the branch, the value would change from False to True.
+Currently the coverage reaches only the 3rd one, with the 1st, 2nd and 4th not being reached.
+
 
 ## Coverage improvement
 
@@ -64,6 +83,28 @@ https://github.com/thekingoflorda/Red-DiscordBot/commit/998fed24ce393340d4945c54
 
 With the original tests 0/3 conditional branches where actually run, with the new tests all of them ran.
 I achieved this by inputting a float value, a negative number and trying to withdraw so much that the value of the bank account went under 0.
+
+Teammember: Bram
+
+test_get_account:
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88cc2a3c57047d0614d
+
+// screenshot og coverage1
+// screenshot new coverage1
+
+With the original tests 3/4 conditional branches ran, with my implemented changes this increased to 4/4.
+This was improved by simulating the called on bank being global and running the get_account function.
+
+test_get_bank_name:
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88cc2a3c57047d0614d
+
+// screenshot og coverage2
+// screenshot new coverage2
+
+With the original tests 1/4 conditional branches ran, with my implemented changes this increased to 4/4.
+This was improved by simulating the called on bank being global and running the get_bank_name function, and also by supplying the function with a bank's name variable being None.
 
 ### Overall
 
