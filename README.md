@@ -138,3 +138,6 @@ Forked the code and altered the github page to comply with the assignment requir
 
 Ivan:
 Completed own part and tried to help others as mush as could.
+
+Bram:
+Completed own part and helped others when neccessary.
