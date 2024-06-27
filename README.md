@@ -64,6 +64,23 @@ With the dictionary branch_coverage we track if a specific branch was executed (
 
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/3ab47933-c160-470b-934f-3f9749b6a5f6)
 
+Teammember: Zenno
+
+Function 1: is_command
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/82f19155b3fe8138d679ae80d0ace062c460e7ba
+
+<img width="265" alt="Screenshot 2024-06-27 at 20 01 08" src="https://github.com/thekingoflorda/Red-DiscordBot/assets/78911539/ff125494-5731-4918-be11-8ee4776f44ea">
+
+In this image we see the result the branch coverage wrote to the branch_coverage_zenno.txt file, the first 2 are relevant for the is_command function, as we can see none of the branches get covered yet.
+
+Function 2: get_prefix
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/bc309899c6dfe48be830502d22fad0269cbb5f02
+
+<img width="265" alt="Screenshot 2024-06-27 at 20 01 08" src="https://github.com/thekingoflorda/Red-DiscordBot/assets/78911539/b2fc23c6-083d-45ae-8032-422d080ab15f">
+
+In this image we see the result the branch coverage wrote to the branch_coverage_zenno.txt file, the last 2 are relevant for the get_prefix function, as we can see none of the branches get covered yet. 
 
 ## Coverage improvement
 
@@ -131,6 +148,28 @@ Mocking is used to simulate different return values and exceptions from the meth
 
 Coverage report is also put in the branch_coverage_report.txt file.
 
+Teammember: Zenno
+
+Test 1: test_is_command
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/c3ba787328cf46596c7434c20307b34415e18eec
+
+<img width="265" alt="Screenshot 2024-06-27 at 20 01 08" src="https://github.com/thekingoflorda/Red-DiscordBot/assets/78911539/644c90ef-755b-4c83-9d30-52db318d5a38">
+
+<img width="322" alt="Screenshot 2024-06-27 at 20 00 49" src="https://github.com/thekingoflorda/Red-DiscordBot/assets/78911539/5c21cc56-b4eb-4ab3-a1e7-833bd82b04eb">
+
+With the original testing this function was not covered so I created a new test. My new tests increased this to 2/2 conditional branches ran. I achieved this improvement by simulating a bot object and its get_command method. By controlling the return value of get_command I was able to test all branches of the is_command function.
+
+Test 2: test_get_prefix
+
+https://github.com/thekingoflorda/Red-DiscordBot/commit/bc309899c6dfe48be830502d22fad0269cbb5f02
+
+<img width="265" alt="Screenshot 2024-06-27 at 20 01 08" src="https://github.com/thekingoflorda/Red-DiscordBot/assets/78911539/d1d24158-ab87-4c09-aee8-8601148904e4">
+
+<img width="322" alt="Screenshot 2024-06-27 at 20 00 49" src="https://github.com/thekingoflorda/Red-DiscordBot/assets/78911539/cb0969c5-f950-436e-8d18-d99995527f32">
+
+With the original testing this function was not covered so I created a new test. My new tests increased this to 2/2 conditional branches ran. This was improved by creating a mock message with controlled content and a mock bot with a specific command prefix. By doing this I was able to test both the scenario where the message content starts with a prefix and the scenario where it does not, covering all branches of the get_prefix function.
+
 
 ### Overall
 
@@ -148,3 +187,8 @@ Completed own part and tried to help others as mush as could.
 
 Bram:
 Completed own part and helped others when neccessary.
+
+Zenno:
+Completed own part of the assignment and tried to assist others where possible.
+
+
