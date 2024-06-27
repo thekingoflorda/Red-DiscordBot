@@ -199,7 +199,10 @@ Zenno worked in alias.py:
 
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/465b4a8f-94bb-4e11-ae5b-90217a13aca9)
 
-<Provide a screenshot of the new coverage results by running the existing tool using all test modifications made by the group>
+The new general coverage result is:
+
+![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/378d7d22-f393-45e7-9020-cc91d5883a52)
+
 
 ## Statement of individual contributions
 
