@@ -45,7 +45,7 @@ https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88c
 
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/64592718/9449b504-e45f-4446-8fc0-bf4cc13087a2)
 In this image you can see the result of the coverage tool that has been put into branch_coverage.txt. The listed values are for each conditional branch, if the tests covered the branch, the value would change from False to True.
-Currently the coverage reaches the 2nd, 3rd and 4th branches but not the 1st one.
+Currently the coverage reaches the 2nd, 3rd and 5th branches but not the 1st and the 4th one.
 
 Function 2: get_bank_name
 
@@ -124,7 +124,7 @@ https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88c
 
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/64592718/4d44a551-3634-4ecb-9c3c-17d82f781edd)
 
-With the original tests 3/4 conditional branches ran, with my implemented changes this increased to 4/4.
+With the original tests 3/5 conditional branches ran, with my implemented changes this increased to 4/5.
 This was improved by simulating the called on bank being global and running the get_account function.
 
 test_get_bank_name:
