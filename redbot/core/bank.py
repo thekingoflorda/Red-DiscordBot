@@ -84,6 +84,18 @@ _cache = {"bank_name": None, "currency": None, "default_balance": None, "max_bal
 global coverage
 coverage = {500: 0, 501: 0, 502: 0, 503: 0, 504: 0, 505: 0, 506: 0, 507: 0, 508: 0, 509: 0}
 
+global branch_coverage
+branch_coverage = {
+    "get_account_branch1": False,
+    "get_account_branch2": False,
+    "get_account_branch3": False,
+    "get_account_branch4": False,
+    "get_bank_name_branch1": False,
+    "get_bank_name_branch2": False,
+    "get_bank_name_branch3": False,
+    "get_bank_name_branch4": False
+}
+
 async def _init():
     global _config
     _config = Config.get_conf(None, 384734293238749, cog_name="Bank", force_registration=True)
@@ -684,19 +696,27 @@ async def get_account(member: Union[discord.Member, discord.User]) -> Account:
     """
     if await is_global():
         all_accounts = await _config.all_users()
+        branch_coverage["get_account_branch1"] = True
     else:
         all_accounts = await _config.all_members(member.guild)
+        branch_coverage["get_account_branch2"] = True
 
     if member.id not in all_accounts:
+        branch_coverage["get_account_branch3"] = True
         acc_data = {"name": member.display_name, "created_at": _DEFAULT_MEMBER["created_at"]}
         try:
             acc_data["balance"] = await get_default_balance(member.guild)
         except AttributeError:
             acc_data["balance"] = await get_default_balance()
     else:
+        branch_coverage["get_account_branch4"] = True
         acc_data = all_accounts[member.id]
 
     acc_data["created_at"] = _decode_time(acc_data["created_at"])
+
+    with open("branch_coverage.txt", "w") as file:
+        file.write(str(branch_coverage))
+
     return Account(**acc_data)
 
 
@@ -776,13 +796,29 @@ async def get_bank_name(guild: discord.Guild = None) -> str:
 
     """
     if await is_global():
+        branch_coverage["get_bank_name_branch1"] = True
         global _cache
         if _cache["bank_name"] is None:
+            branch_coverage["get_bank_name_branch2"] = True
             _cache["bank_name"] = await _config.bank_name()
+
+        with open("branch_coverage.txt", "w") as file:
+            file.write(str(branch_coverage))
+
         return _cache["bank_name"]
     elif guild is not None:
+        branch_coverage["get_bank_name_branch3"] = True
+
+        with open("branch_coverage.txt", "w") as file:
+            file.write(str(branch_coverage))
+
         return await _config.guild(guild).bank_name()
     else:
+        branch_coverage["get_bank_name_branch4"] = True
+
+        with open("branch_coverage.txt", "w") as file:
+            file.write(str(branch_coverage))
+
         raise RuntimeError("Guild parameter is required and missing.")
 
 
