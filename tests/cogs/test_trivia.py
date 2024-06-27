@@ -20,7 +20,8 @@ def test_trivia_lists():
         1001: False,  # if list_names
         1002: False,  # except InvalidListError as exc
         1003: False,  # if isinstance(e, SchemaError)
-        1004: False   # if problem_lists
+        1004: False,  # if not isinstance(e, SchemaError)
+        1005: False   # if problem_lists
     }
 
     def set_branch_coverage(branch_id):
@@ -41,10 +42,11 @@ def test_trivia_lists():
                 set_branch_coverage(1003)
                 problem_lists.append((l.stem, f"SCHEMA error:\n{format_schema_error(e)}"))
             else:
+                set_branch_coverage(1004)
                 problem_lists.append((l.stem, f"YAML error:\n{e!s}"))
 
     if problem_lists:
-        set_branch_coverage(1004)
+        set_branch_coverage(1005)
         msg = "\n".join(
             f"- {name}:\n{textwrap.indent(error, '    ')}" for name, error in problem_lists
         )
