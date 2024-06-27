@@ -74,23 +74,23 @@ async def test_delete_global_alias(alias, ctx):
     alias_obj = await alias._aliases.get_alias(None, "test_global")
     assert alias_obj is None
 
-from unittest.mock import Mock, AsyncMock
+from unittest.mock import Mock, AsyncMock, patch
 from redbot.cogs.alias.alias import branch_coverage
 
 def test_is_command(alias):
-    command_name = "help"
-    non_command_name = "not_a_command"
-
     alias.bot = Mock()
-    alias.bot.get_command = Mock(side_effect=lambda cmd: cmd if cmd == command_name else None)
 
-    assert alias.is_command(command_name) is True
+    alias.bot.get_command = Mock(return_value=True)
+    assert alias.is_command("help") is True
     assert branch_coverage["is_command_command_exists"] is True
 
-    assert alias.is_command(non_command_name) is False
-    assert branch_coverage["is_command_reserved_name"] is False
+    alias.bot.get_command = Mock(return_value=None)
+    with patch("redbot.cogs.alias.alias.commands.RESERVED_COMMAND_NAMES", new=["not_a_command"]):
+        assert alias.is_command("not_a_command") is True
+        assert branch_coverage["is_command_reserved_name"] is True
 
-@pytest.mark.asyncio
+    assert alias.is_command("some_other_name") is False
+
 async def test_get_prefix(alias):
     mock_message = Mock()
     mock_message.content = "!test"
@@ -105,6 +105,9 @@ async def test_get_prefix(alias):
     prefix = await alias.get_prefix(mock_message)
 
     assert prefix == "!"
-
     assert branch_coverage["get_prefix_for_loop"] is True
-    assert branch_coverage["get_prefix_raise_error"] is False
+
+    mock_message.content = "test"
+    with pytest.raises(ValueError):
+        await alias.get_prefix(mock_message)
+    assert branch_coverage["get_prefix_raise_error"] is True
