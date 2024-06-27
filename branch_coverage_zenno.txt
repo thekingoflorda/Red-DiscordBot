@@ -1,4 +1,4 @@
 is_command_command_exists: Covered
-is_command_reserved_name: Not covered
+is_command_reserved_name: Covered
 get_prefix_for_loop: Covered
-get_prefix_raise_error: Not covered
+get_prefix_raise_error: Covered
