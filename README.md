@@ -188,12 +188,15 @@ With the original testing this function was not covered so I created a new test.
 After our improvements the relevant areas now looks like this:
 
 Bram and Luc worked in bank.py:
+
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/16723ed4-ae1a-4eb9-afcc-4af06e5da363)
 
 Ivan worked in test_trivia.py:
+
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/3ed0c9c0-673e-4c53-880b-604074c3b702)
 
 Zenno worked in alias.py:
+
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/465b4a8f-94bb-4e11-ae5b-90217a13aca9)
 
 <Provide a screenshot of the new coverage results by running the existing tool using all test modifications made by the group>
