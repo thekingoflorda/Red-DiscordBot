@@ -110,7 +110,9 @@ async def test_get_bank_name(bank, guild_factory):
     guild = guild_factory.get()
     with pytest.raises(RuntimeError):
         await bank.get_bank_name(guild=None)
+    await bank.get_bank_name(guild=guild)
 
     await bank.set_global(True)
+    await bank.set_bank_name(None, guild)
     await bank.get_bank_name(guild=guild)
     await bank.set_global(False)
