@@ -183,7 +183,17 @@ With the original testing this function was not covered so I created a new test.
 
 ### Overall
 
-<Provide a screenshot of the old coverage results by running an existing tool (the same as you already showed above)>
+![CleanShot 2024-06-22 at 12 05 00@2x](https://github.com/thekingoflorda/Red-DiscordBot/assets/64592718/12137089-561f-4164-96a3-7ea73fb716e6)
+
+After our improvements the relevant areas now looks like this:
+
+Bram and Luc worked in bank.py:
+image of that
+
+Ivan worked in test_trivia.py:
+image
+
+Zenno worked in 
 
 <Provide a screenshot of the new coverage results by running the existing tool using all test modifications made by the group>
 
