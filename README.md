@@ -62,6 +62,9 @@ Function: test_trivia_lists
 
 With the dictionary branch_coverage we track if a specific branch was executed (initially all of them areset to False and, when they run set_branch_coverage method changes according branch's value to True. At the end of program execution I also want to right the report of how the coverage performed in branch_coverage_report.txt file.
 
+![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/3ab47933-c160-470b-934f-3f9749b6a5f6)
+
+
 ## Coverage improvement
 
 ### Individual tests
