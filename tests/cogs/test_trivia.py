@@ -26,6 +26,19 @@ branch_coverage = {
 def set_branch_coverage(branch_id):
     branch_coverage[branch_id] = True
 
+def _get_error_message(*keys: Any, key: str = "UNKNOWN", parent_key: str = "UNKNOWN") -> str:
+        if not keys:
+            set_branch_coverage(2001)
+            return TRIVIA_LIST_SCHEMA._error
+
+        current = TRIVIA_LIST_SCHEMA.schema
+        for key_name in keys:
+            if isinstance(current, And):
+                set_branch_coverage(2002)
+                current = current.args[0]
+            current = current[key_name]
+        return str(current._error).format(key=repr(key), parent_key=repr(parent_key))
+
 def test_trivia_lists():
     from redbot.cogs.trivia import InvalidListError, get_core_lists, get_list
 
@@ -33,6 +46,9 @@ def test_trivia_lists():
     set_branch_coverage(1001)
     assert list_names
 
+    # Manually adding invalid trivia list for testing
+    list_names.append('invalid_trivia_list')
+    
     problem_lists = []
     for l in list_names:
         try:
@@ -54,22 +70,15 @@ def test_trivia_lists():
         )
         raise TypeError("The following lists contain errors:\n" + msg)
 
+    # Testing _get_error_message function with different inputs to trigger the branches
+    _get_error_message()
+    _get_error_message('some_key')
+    _get_error_message('some_key', key='test_key', parent_key='parent_key')
+    _get_error_message('some_key', 'nested_key', key='test_key', parent_key='parent_key')
+
     with open("branch_coverage_report.txt", "w") as f:
         for branch_id, was_taken in branch_coverage.items():
             f.write(f"Branch {branch_id}: {'Taken' if was_taken else 'Not Taken'}\n")
-
-def _get_error_message(*keys: Any, key: str = "UNKNOWN", parent_key: str = "UNKNOWN") -> str:
-    if not keys:
-        set_branch_coverage(2001)
-        return TRIVIA_LIST_SCHEMA._error
-
-    current = TRIVIA_LIST_SCHEMA.schema
-    for key_name in keys:
-        if isinstance(current, And):
-            set_branch_coverage(2002)
-            current = current.args[0]
-        current = current[key_name]
-    return str(current._error).format(key=repr(key), parent_key=repr(parent_key))
 
 @pytest.mark.parametrize(
     "data,error_msg",
