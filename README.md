@@ -43,7 +43,7 @@ Function 1: get_account
 
 https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88cc2a3c57047d0614d
 
-![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/11b1130b-4ad9-4ce4-9b9a-e6ed2d1ac8d0)
+![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/7eca1a22-a642-42ff-83d6-d43e3e655e92)
 
 In this image you can see the result of the coverage tool that has been put into branch_coverage.txt. The listed values are for each conditional branch, if the tests covered the branch, the value would change from False to True.
 Currently the coverage reaches the 2nd, 3rd and 5th branches but not the 1st and the 4th one.
@@ -63,10 +63,9 @@ Functions: test_trivia_lists, _get_error_message
 
 With the dictionary branch_coverage we track if a specific branch was executed (initially all of them areset to False and, when they run set_branch_coverage method changes according branch's value to True. At the end of program execution I also want to right the report of how the coverage performed in branch_coverage_report.txt file.
 
-![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/38f5a05d-bca4-4643-9b51-4d0320173b67)
+With the initial coverage tool I have got the following results:
 
-With the coverage tool above I have got the following results:
-
+![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/a57e1e19-a8c1-473f-ad19-8a7cd97b29a2)
 
 
 
@@ -126,7 +125,7 @@ test_get_account:
 
 https://github.com/thekingoflorda/Red-DiscordBot/commit/368e7067e209c3c11689d88cc2a3c57047d0614d
 
-![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/215c839e-abcb-443c-9858-f9a11f24261d)
+![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/0e13b602-0600-4096-8d41-25b5ccf24ec5)
 
 ![image](https://github.com/thekingoflorda/Red-DiscordBot/assets/122359361/2545c3d5-c4f9-47c0-b9b6-8437897b237d)
 
