@@ -78,18 +78,33 @@ from unittest.mock import Mock, AsyncMock
 from redbot.cogs.alias.alias import branch_coverage
 
 def test_is_command(alias):
-    # Setup: Create some command and non-command names
     command_name = "help"
     non_command_name = "not_a_command"
 
-    # Mock the bot's get_command method
     alias.bot = Mock()
     alias.bot.get_command = Mock(side_effect=lambda cmd: cmd if cmd == command_name else None)
 
-    # Execution & Assertion: Check if is_command correctly identifies commands and non-commands
     assert alias.is_command(command_name) is True
     assert branch_coverage["is_command_command_exists"] is True
 
     assert alias.is_command(non_command_name) is False
     assert branch_coverage["is_command_reserved_name"] is False
 
+@pytest.mark.asyncio
+async def test_get_prefix(alias):
+    mock_message = Mock()
+    mock_message.content = "!test"
+    mock_message.channel = AsyncMock()
+    mock_message.author = AsyncMock()
+
+    mock_bot = Mock()
+    mock_bot.command_prefix = AsyncMock(return_value="!")
+
+    alias.bot = mock_bot
+
+    prefix = await alias.get_prefix(mock_message)
+
+    assert prefix == "!"
+
+    assert branch_coverage["get_prefix_for_loop"] is True
+    assert branch_coverage["get_prefix_raise_error"] is False

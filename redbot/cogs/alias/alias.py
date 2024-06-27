@@ -20,7 +20,9 @@ log = logging.getLogger("red.cogs.alias")
 
 branch_coverage = {
     "is_command_command_exists": False,
-    "is_command_reserved_name": False
+    "is_command_reserved_name": False,
+    "get_prefix_for_loop": False,
+    "get_prefix_raise_error": False
 }
 
 def write_coverage_info():
@@ -167,7 +169,13 @@ class Alias(commands.Cog):
         prefixes = sorted(prefix_list, key=lambda pfx: len(pfx), reverse=True)
         for p in prefixes:
             if content.startswith(p):
+                # This branch was reached, set the flag in branch_coverage
+                branch_coverage["get_prefix_for_loop"] = True
+                write_coverage_info()
                 return p
+        # This branch was reached, set the flag in branch_coverage
+        branch_coverage["get_prefix_raise_error"] = True
+        write_coverage_info()
         raise ValueError("No prefix found.")
 
     async def call_alias(self, message: discord.Message, prefix: str, alias: AliasEntry):
