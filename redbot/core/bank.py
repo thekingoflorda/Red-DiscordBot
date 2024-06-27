@@ -90,6 +90,7 @@ branch_coverage = {
     "get_account_branch2": False,
     "get_account_branch3": False,
     "get_account_branch4": False,
+    "get_account_branch5": False,
     "get_bank_name_branch1": False,
     "get_bank_name_branch2": False,
     "get_bank_name_branch3": False,
@@ -707,9 +708,10 @@ async def get_account(member: Union[discord.Member, discord.User]) -> Account:
         try:
             acc_data["balance"] = await get_default_balance(member.guild)
         except AttributeError:
+            branch_coverage["get_account_branch4"] = True
             acc_data["balance"] = await get_default_balance()
     else:
-        branch_coverage["get_account_branch4"] = True
+        branch_coverage["get_account_branch5"] = True
         acc_data = all_accounts[member.id]
 
     acc_data["created_at"] = _decode_time(acc_data["created_at"])
