@@ -26,7 +26,7 @@ branch_coverage = {
 }
 
 def write_coverage_info():
-    with open('branch_coverage.txt', 'w') as f:
+    with open('branch_coverage_zenno.txt', 'w') as f:
         for branch, covered in branch_coverage.items():
             f.write(f"{branch}: {'Covered' if covered else 'Not covered'}\n")
 
