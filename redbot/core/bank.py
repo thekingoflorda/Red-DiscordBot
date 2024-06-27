@@ -369,7 +369,7 @@ async def set_balance(member: Union[discord.Member, discord.User], amount: int) 
         coverage[506] += 1
         await group.name.set(member.display_name)
 
-    with open("blup.txt", "w") as file:
+    with open("lucCoverageReport.txt", "w") as file:
         file.write(str(coverage))
 
     return amount
@@ -417,7 +417,7 @@ async def withdraw_credits(member: discord.Member, amount: int) -> int:
     bal = await get_balance(member)
     if amount > bal: # 509
         coverage[509] += 1
-        with open("blup.txt", "w") as file:
+        with open("lucCoverageReport.txt", "w") as file:
             file.write(str(coverage))
         raise ValueError(
             "Insufficient funds {} > {}".format(
@@ -426,7 +426,7 @@ async def withdraw_credits(member: discord.Member, amount: int) -> int:
             )
         )
 
-    with open("blup.txt", "w") as file:
+    with open("lucCoverageReport.txt", "w") as file:
         file.write(str(coverage))
 
     return await set_balance(member, bal - amount)
