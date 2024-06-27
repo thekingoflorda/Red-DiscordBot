@@ -13,19 +13,21 @@ from redbot.cogs.trivia.schema import (
     format_schema_error,
 )
 
+branch_coverage = {
+    1001: False,  # if list_names
+    1002: False,  # except InvalidListError as exc
+    1003: False,  # if isinstance(e, SchemaError)
+    1004: False,  # if not isinstance(e, SchemaError)
+    1005: False,  # if problem_lists
+    2001: False,  # if not keys
+    2002: False,  # if isinstance(current, And)
+}
+
+def set_branch_coverage(branch_id):
+    branch_coverage[branch_id] = True
+
 def test_trivia_lists():
     from redbot.cogs.trivia import InvalidListError, get_core_lists, get_list
-
-    branch_coverage = {
-        1001: False,  # if list_names
-        1002: False,  # except InvalidListError as exc
-        1003: False,  # if isinstance(e, SchemaError)
-        1004: False,  # if not isinstance(e, SchemaError)
-        1005: False   # if problem_lists
-    }
-
-    def set_branch_coverage(branch_id):
-        branch_coverage[branch_id] = True
 
     list_names = get_core_lists()
     set_branch_coverage(1001)
@@ -58,11 +60,13 @@ def test_trivia_lists():
 
 def _get_error_message(*keys: Any, key: str = "UNKNOWN", parent_key: str = "UNKNOWN") -> str:
     if not keys:
+        set_branch_coverage(2001)
         return TRIVIA_LIST_SCHEMA._error
 
     current = TRIVIA_LIST_SCHEMA.schema
     for key_name in keys:
         if isinstance(current, And):
+            set_branch_coverage(2002)
             current = current.args[0]
         current = current[key_name]
     return str(current._error).format(key=repr(key), parent_key=repr(parent_key))
