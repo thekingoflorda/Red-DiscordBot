@@ -73,3 +73,38 @@ async def test_delete_global_alias(alias, ctx):
 
     alias_obj = await alias._aliases.get_alias(None, "test_global")
     assert alias_obj is None
+
+from unittest.mock import Mock, AsyncMock
+from redbot.cogs.alias.alias import branch_coverage
+
+def test_is_command(alias):
+    command_name = "help"
+    non_command_name = "not_a_command"
+
+    alias.bot = Mock()
+    alias.bot.get_command = Mock(side_effect=lambda cmd: cmd if cmd == command_name else None)
+
+    assert alias.is_command(command_name) is True
+    assert branch_coverage["is_command_command_exists"] is True
+
+    assert alias.is_command(non_command_name) is False
+    assert branch_coverage["is_command_reserved_name"] is False
+
+@pytest.mark.asyncio
+async def test_get_prefix(alias):
+    mock_message = Mock()
+    mock_message.content = "!test"
+    mock_message.channel = AsyncMock()
+    mock_message.author = AsyncMock()
+
+    mock_bot = Mock()
+    mock_bot.command_prefix = AsyncMock(return_value="!")
+
+    alias.bot = mock_bot
+
+    prefix = await alias.get_prefix(mock_message)
+
+    assert prefix == "!"
+
+    assert branch_coverage["get_prefix_for_loop"] is True
+    assert branch_coverage["get_prefix_raise_error"] is False

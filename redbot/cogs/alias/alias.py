@@ -18,6 +18,17 @@ _ = Translator("Alias", __file__)
 
 log = logging.getLogger("red.cogs.alias")
 
+branch_coverage = {
+    "is_command_command_exists": False,
+    "is_command_reserved_name": False,
+    "get_prefix_for_loop": False,
+    "get_prefix_raise_error": False
+}
+
+def write_coverage_info():
+    with open('branch_coverage_zenno.txt', 'w') as f:
+        for branch, covered in branch_coverage.items():
+            f.write(f"{branch}: {'Covered' if covered else 'Not covered'}\n")
 
 class _TrackingFormatter(Formatter):
     def __init__(self):
@@ -126,7 +137,19 @@ class Alias(commands.Cog):
         The function name can be changed when alias is reworked
         """
         command = self.bot.get_command(alias_name)
-        return command is not None or alias_name in commands.RESERVED_COMMAND_NAMES
+        if command is not None:
+            # This branch was reached, so set the flag in branch_coverage
+            branch_coverage["is_command_command_exists"] = True
+            write_coverage_info()
+            return True
+        elif alias_name in commands.RESERVED_COMMAND_NAMES:
+            # This branch was reached, so set the flag in branch_coverage
+            branch_coverage["is_command_reserved_name"] = True
+            write_coverage_info()
+            return True
+        else:
+            write_coverage_info()
+            return False
 
     @staticmethod
     def is_valid_alias_name(alias_name: str) -> bool:
@@ -146,7 +169,13 @@ class Alias(commands.Cog):
         prefixes = sorted(prefix_list, key=lambda pfx: len(pfx), reverse=True)
         for p in prefixes:
             if content.startswith(p):
+                # This branch was reached, set the flag in branch_coverage
+                branch_coverage["get_prefix_for_loop"] = True
+                write_coverage_info()
                 return p
+        # This branch was reached, set the flag in branch_coverage
+        branch_coverage["get_prefix_raise_error"] = True
+        write_coverage_info()
         raise ValueError("No prefix found.")
 
     async def call_alias(self, message: discord.Message, prefix: str, alias: AliasEntry):
