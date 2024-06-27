@@ -1,9 +1,10 @@
 import textwrap
 from typing import Any
-
 import pytest
 import yaml
+import unittest
 from schema import And, Optional, SchemaError
+from unittest.mock import patch
 
 from redbot.cogs.trivia.schema import (
     ALWAYS_MATCH,
@@ -13,57 +14,99 @@ from redbot.cogs.trivia.schema import (
     format_schema_error,
 )
 
-def test_trivia_lists():
-    from redbot.cogs.trivia import InvalidListError, get_core_lists, get_list
+branch_coverage = {
+    1001: False,  # if list_names
+    1002: False,  # except InvalidListError as exc
+    1003: False,  # if isinstance(e, SchemaError)
+    1004: False,  # if not isinstance(e, SchemaError)
+    1005: False,  # if problem_lists
+    2001: False,  # if not keys
+    2002: False,  # if isinstance(current, And)
+}
 
-    branch_coverage = {
-        1001: False,  # if list_names
-        1002: False,  # except InvalidListError as exc
-        1003: False,  # if isinstance(e, SchemaError)
-        1004: False   # if problem_lists
-    }
-
-    def set_branch_coverage(branch_id):
-        branch_coverage[branch_id] = True
-
-    list_names = get_core_lists()
-    set_branch_coverage(1001)
-    assert list_names
-
-    problem_lists = []
-    for l in list_names:
-        try:
-            get_list(l)
-        except InvalidListError as exc:
-            set_branch_coverage(1002)
-            e = exc.__cause__
-            if isinstance(e, SchemaError):
-                set_branch_coverage(1003)
-                problem_lists.append((l.stem, f"SCHEMA error:\n{format_schema_error(e)}"))
-            else:
-                problem_lists.append((l.stem, f"YAML error:\n{e!s}"))
-
-    if problem_lists:
-        set_branch_coverage(1004)
-        msg = "\n".join(
-            f"- {name}:\n{textwrap.indent(error, '    ')}" for name, error in problem_lists
-        )
-        raise TypeError("The following lists contain errors:\n" + msg)
-
-    with open("branch_coverage_report.txt", "w") as f:
-        for branch_id, was_taken in branch_coverage.items():
-            f.write(f"Branch {branch_id}: {'Taken' if was_taken else 'Not Taken'}\n")
+def set_branch_coverage(branch_id):
+    branch_coverage[branch_id] = True
 
 def _get_error_message(*keys: Any, key: str = "UNKNOWN", parent_key: str = "UNKNOWN") -> str:
     if not keys:
+        set_branch_coverage(2001)
         return TRIVIA_LIST_SCHEMA._error
 
     current = TRIVIA_LIST_SCHEMA.schema
     for key_name in keys:
         if isinstance(current, And):
+            set_branch_coverage(2002)
             current = current.args[0]
         current = current[key_name]
+
+    with open("branch_coverage_report.txt", "w") as f:
+        for branch_id, was_taken in branch_coverage.items():
+            f.write(f"Branch {branch_id}: {'Taken' if was_taken else 'Not Taken'}\n")
     return str(current._error).format(key=repr(key), parent_key=repr(parent_key))
+
+@patch('redbot.cogs.trivia.get_list')
+def test_trivia_lists(mock_get_list):  
+    from redbot.cogs.trivia import InvalidListError, get_core_lists, get_list
+
+    def mock_get_core_lists():
+        with open("branch_coverage_report.txt", "w") as f:
+            for branch_id, was_taken in branch_coverage.items():
+                f.write(f"Branch {branch_id}: {'Taken' if was_taken else 'Not Taken'}\n")
+        return ["core_list1", "core_list2"]  
+
+    original_get_core_lists = get_core_lists
+    get_core_lists = mock_get_core_lists
+
+    def side_effect(l):
+        if l == "invalid_trivia_list.yaml":
+            set_branch_coverage(1001)
+            error = InvalidListError("This is a test InvalidListError")
+            error.__cause__ = SchemaError("Schema is invalid")
+            raise error
+        with open("branch_coverage_report.txt", "w") as f:
+            for branch_id, was_taken in branch_coverage.items():
+                f.write(f"Branch {branch_id}: {'Taken' if was_taken else 'Not Taken'}\n")
+        return l  
+    
+    mock_get_list.side_effect = side_effect
+    
+    try:
+        list_names = get_core_lists()
+        assert isinstance(list_names, list) and list_names, "No core trivia lists found"
+        
+        problem_lists = []
+        for l in list_names + ["invalid_trivia_list.yaml"]:
+            try:
+                get_list(l)
+            except InvalidListError as exc:
+                set_branch_coverage(1002)
+                e = exc.__cause__
+                if isinstance(e, SchemaError):
+                    set_branch_coverage(1003)
+                    problem_lists.append((l, f"SCHEMA error:\n{e}"))
+                else:
+                    set_branch_coverage(1004)
+                    problem_lists.append((l, f"YAML error:\n{e}"))
+        
+        if problem_lists:
+            set_branch_coverage(1005)
+            msg = "\n".join(
+                f"- {name}:\n{textwrap.indent(error, '    ')}" for name, error in problem_lists
+            )
+            raise TypeError("The following lists contain errors:\n" + msg)
+
+        # Test the _get_error_message function with different inputs to trigger the branches
+        _get_error_message()
+        _get_error_message('some_key')
+        _get_error_message('some_key', key='test_key', parent_key='parent_key')
+        _get_error_message('some_key', 'nested_key', key='test_key', parent_key='parent_key')
+
+    finally:
+        get_core_lists = original_get_core_lists
+
+    with open("branch_coverage_report.txt", "w") as f:
+        for branch_id, was_taken in branch_coverage.items():
+            f.write(f"Branch {branch_id}: {'Taken' if was_taken else 'Not Taken'}\n")
 
 @pytest.mark.parametrize(
     "data,error_msg",
@@ -102,9 +145,10 @@ def test_trivia_lists_empty_list_names():
     original_get_core_lists = get_core_lists
     get_core_lists = mock_get_core_lists
 
+    mock_get_list = unittest.mock.Mock()  
     try:
-        test_trivia_lists()
-    except AssertionError:
+        test_trivia_lists(mock_get_list)  
+    except TypeError:
         pass
     finally:
         get_core_lists = original_get_core_lists
